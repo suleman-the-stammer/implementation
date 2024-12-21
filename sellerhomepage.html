@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Homepage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            display: flex;
+            margin: 20px;
+        }
+
+        .left-panel {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 20px;
+            margin-right: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #2980b9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+            transform: scale(1.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .selected-product {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .bill-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .bill-table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        .bill-table th, .bill-table td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Seller Homepage</div>
+
+    <div class="container">
+        <!-- Left Panel - Product Data Grid -->
+        <div class="left-panel">
+            <h3>Available Products</h3>
+            <input type="text" id="search" placeholder="Search Products..." class="form-group" oninput="searchProducts()">
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Product rows will be displayed here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Right Panel - Selected Items for Billing -->
+        <div class="right-panel">
+            <h3>Selected Product</h3>
+            <div class="selected-product">
+                <span id="selectedProductName">None</span><br>
+                <label for="quantityToSell">Quantity:</label>
+                <input type="number" id="quantityToSell" min="1" max="100" value="1">
+                <button class="btn" onclick="addToBill()">Add to Bill</button>
+            </div>
+
+            <h3>Bill</h3>
+            <table class="bill-table" id="billTable">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Bill items will be shown here -->
+                </tbody>
+            </table>
+
+            <button class="btn" onclick="printBill()">Print Bill</button>
+        </div>
+    </div>
+
+    <script>
+        let products = [
+            { id: "101", name: "Milk", quantity: 50, price: 1.5, category: "Groceries" },
+            { id: "102", name: "Shirt", quantity: 20, price: 10, category: "Clothing" },
+            { id: "103", name: "Laptop", quantity: 10, price: 500, category: "Electronics" }
+        ];
+
+        let selectedProduct = null;
+        let billItems = [];
+
+        // Display products in the table
+        function displayProducts() {
+            const productTableBody = document.getElementById("productTable").getElementsByTagName("tbody")[0];
+            productTableBody.innerHTML = "";
+            products.forEach(product => {
+                let row = productTableBody.insertRow();
+                row.insertCell(0).textContent = product.name;
+                row.insertCell(1).textContent = product.category;
+                row.insertCell(2).textContent = product.price;
+                row.insertCell(3).textContent = product.quantity;
+                let actionCell = row.insertCell(4);
+                let selectButton = document.createElement("button");
+                selectButton.textContent = "Select";
+                selectButton.className = "btn";
+                selectButton.onclick = () => selectProduct(product);
+                actionCell.appendChild(selectButton);
+            });
+        }
+
+        // Search products based on input
+        function searchProducts() {
+            const searchTerm = document.getElementById("search").value.toLowerCase();
+            const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchTerm));
+            const productTableBody = document.getElementById("productTable").getElementsByTagName("tbody")[0];
+            productTableBody.innerHTML = "";
+            filteredProducts.forEach(product => {
+                let row = productTableBody.insertRow();
+                row.insertCell(0).textContent = product.name;
+                row.insertCell(1).textContent = product.category;
+                row.insertCell(2).textContent = product.price;
+                row.insertCell(3).textContent = product.quantity;
+                let actionCell = row.insertCell(4);
+                let selectButton = document.createElement("button");
+                selectButton.textContent = "Select";
+                selectButton.className = "btn";
+                selectButton.onclick = () => selectProduct(product);
+                actionCell.appendChild(selectButton);
+            });
+        }
+
+        // Select a product and show its details
+        function selectProduct(product) {
+            selectedProduct = product;
+            document.getElementById("selectedProductName").textContent = product.name;
+        }
+
+        // Add selected product to bill
+        function addToBill() {
+            if (!selectedProduct) {
+                alert("Please select a product first.");
+                return;
+            }
+            const quantityToSell = parseInt(document.getElementById("quantityToSell").value, 10);
+            if (quantityToSell > selectedProduct.quantity) {
+                alert("Not enough stock available.");
+                return;
+            }
+            selectedProduct.quantity -= quantityToSell;
+            const totalPrice = selectedProduct.price * quantityToSell;
+            billItems.push({ product: selectedProduct, quantity: quantityToSell, total: totalPrice });
+
+            updateBill();
+            displayProducts();
+        }
+
+        // Update the bill table
+        function updateBill() {
+            const billTableBody = document.getElementById("billTable").getElementsByTagName("tbody")[0];
+            billTableBody.innerHTML = "";
+            billItems.forEach(item => {
+                let row = billTableBody.insertRow();
+                row.insertCell(0).textContent = item.product.name;
+                row.insertCell(1).textContent = item.quantity;
+                row.insertCell(2).textContent = item.product.price;
+                row.insertCell(3).textContent = item.total;
+                let actionCell = row.insertCell(4);
+                let deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.className = "btn";
+                deleteButton.onclick = () => deleteFromBill(item);
+                actionCell.appendChild(deleteButton);
+            });
+        }
+
+        // Delete item from bill
+        function deleteFromBill(item) {
+            billItems = billItems.filter(billItem => billItem !== item);
+            updateBill();
+            products.find(product => product.id === item.product.id).quantity += item.quantity;
+            displayProducts();
+        }
+
+        // Print the bill
+        function printBill() {
+            let billContent = "Product\tQuantity\tPrice\tTotal\n";
+            billItems.forEach(item => {
+                billContent += `${item.product.name}\t${item.quantity}\t${item.product.price}\t${item.total}\n`;
+            });
+            let printWindow = window.open("", "_blank");
+            printWindow.document.write(`<pre>${billContent}</pre>`);
+            printWindow.print();
+            printWindow.close();
+        }
+
+        // Initial display of products
+        displayProducts();
+    </script>
+</body>
+</html>

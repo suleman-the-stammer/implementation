@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Category</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus {
+            border-color: #2980b9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+            transform: scale(1.02);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Supermarket Management System</div>
+
+    <div class="container">
+        <h1>Delete Category</h1>
+        <form id="deleteCategoryForm">
+            <div class="form-group">
+                <label for="categoryId">Category ID to Delete:</label>
+                <input type="text" id="categoryId" name="categoryId" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmation">Are you sure you want to delete this category?</label>
+                <input type="checkbox" id="confirmation" name="confirmation">
+                <label for="confirmation">Yes, I am sure</label>
+            </div>
+            <button type="button" class="btn" onclick="deleteCategory()">Delete Category</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        let categories = [
+            { id: "001", name: "Groceries", description: "Daily essential food items." },
+            { id: "002", name: "Clothing", description: "Clothes and accessories." },
+            { id: "003", name: "Electronics", description: "Electronic gadgets and accessories." }
+        ];
+
+        function deleteCategory() {
+            const categoryId = document.getElementById('categoryId').value;
+            const confirmation = document.getElementById('confirmation').checked;
+
+            if (!confirmation) {
+                displayMessage('You must confirm the deletion by checking the box.', 'error');
+                return;
+            }
+
+            const categoryIndex = categories.findIndex(c => c.id === categoryId);
+
+            if (categoryIndex === -1) {
+                displayMessage(`Category with ID '${categoryId}' not found.`, 'error');
+                return;
+            }
+
+            // Remove category from the array
+            categories.splice(categoryIndex, 1);
+            displayMessage(`Category '${categoryId}' deleted successfully!`, 'success');
+            clearForm();
+        }
+
+        function displayMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
+        }
+
+        function clearForm() {
+            document.getElementById('categoryId').value = '';
+            document.getElementById('confirmation').checked = false;
+        }
+    </script>
+</body>
+</html>
