@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #2980b9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+            transform: scale(1.02);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Supermarket Management System</div>
+
+    <div class="container">
+        <h1>Modify Product</h1>
+        <form id="modifyProductForm">
+            <div class="form-group">
+                <label for="productId">Product ID to Modify:</label>
+                <input type="text" id="productId" name="productId" required>
+            </div>
+            <div class="form-group">
+                <label for="productName">New Product Name:</label>
+                <input type="text" id="productName" name="productName">
+            </div>
+            <div class="form-group">
+                <label for="quantity">New Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1">
+            </div>
+            <div class="form-group">
+                <label for="price">New Price:</label>
+                <input type="number" id="price" name="price" min="0.01" step="0.01">
+            </div>
+            <div class="form-group">
+                <label for="category">New Category:</label>
+                <select id="category" name="category">
+                    <option value="">Select a category</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Household">Household</option>
+                </select>
+            </div>
+            <button type="button" class="btn" onclick="modifyProduct()">Modify Product</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        let products = [
+            { id: "101", name: "Milk", quantity: 50, price: 1.5, category: "Groceries" },
+            { id: "102", name: "Shirt", quantity: 20, price: 10, category: "Clothing" }
+        ];
+
+        function modifyProduct() {
+            const productId = document.getElementById('productId').value;
+            const productName = document.getElementById('productName').value;
+            const quantity = document.getElementById('quantity').value;
+            const price = document.getElementById('price').value;
+            const category = document.getElementById('category').value;
+
+            const product = products.find(p => p.id === productId);
+
+            if (!product) {
+                displayMessage(`Product with ID '${productId}' not found.`, 'error');
+                return;
+            }
+
+            if (productName) product.name = productName;
+            if (quantity) product.quantity = parseInt(quantity, 10);
+            if (price) product.price = parseFloat(price);
+            if (category) product.category = category;
+
+            displayMessage(`Product '${productId}' updated successfully!`, 'success');
+        }
+
+        function displayMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
+        }
+    </script>
+</body>
+</html>

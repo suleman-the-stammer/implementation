@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Category</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #2980b9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+            transform: scale(1.02);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Supermarket Management System</div>
+
+    <div class="container">
+        <h1>Modify Category</h1>
+        <form id="modifyCategoryForm">
+            <div class="form-group">
+                <label for="categoryId">Category ID to Modify:</label>
+                <input type="text" id="categoryId" name="categoryId" required>
+            </div>
+            <div class="form-group">
+                <label for="categoryName">New Category Name:</label>
+                <input type="text" id="categoryName" name="categoryName">
+            </div>
+            <div class="form-group">
+                <label for="categoryDescription">New Category Description:</label>
+                <textarea id="categoryDescription" name="categoryDescription" rows="4"></textarea>
+            </div>
+            <button type="button" class="btn" onclick="modifyCategory()">Modify Category</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        let categories = [
+            { id: "001", name: "Groceries", description: "Daily essential food items." },
+            { id: "002", name: "Clothing", description: "Clothes and accessories." },
+            { id: "003", name: "Electronics", description: "Electronic gadgets and accessories." }
+        ];
+
+        function modifyCategory() {
+            const categoryId = document.getElementById('categoryId').value;
+            const categoryName = document.getElementById('categoryName').value;
+            const categoryDescription = document.getElementById('categoryDescription').value;
+
+            const category = categories.find(c => c.id === categoryId);
+
+            if (!category) {
+                displayMessage(`Category with ID '${categoryId}' not found.`, 'error');
+                return;
+            }
+
+            // Modify only if new value is provided
+            if (categoryName) category.name = categoryName;
+            if (categoryDescription) category.description = categoryDescription;
+
+            displayMessage(`Category '${categoryId}' updated successfully!`, 'success');
+        }
+
+        function displayMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
+        }
+    </script>
+</body>
+</html>

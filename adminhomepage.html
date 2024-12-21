@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sub-header {
+            background-color: #ecf0f1;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            margin: 0 20px;
+        }
+
+        .sidebar {
+            width: 25%;
+            background-color: #ffffff;
+            padding: 15px;
+            border-right: 2px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
+        }
+
+        .sidebar button:hover {
+            background-color: #1abc9c;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            width: 75%;
+            padding: 20px;
+            background-color: #fdfdfd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .main-content h1 {
+            font-size: 24px;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .main-content p {
+            font-size: 18px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: right;
+            padding: 10px 20px;
+        }
+
+        .footer button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .footer button:hover {
+            background-color: #c0392b;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">Supermarket Management System</div>
+    <div class="sub-header">Welcome to the Admin Homepage</div>
+
+    <div class="container">
+        <div class="sidebar">
+            <button onclick="addProduct()">Add Product</button>
+            <button onclick="modifyProduct()">Modify Product</button>
+            <button onclick="deleteProduct()">Delete Product</button>
+            <button onclick="addCategory()">Add Category</button>
+            <button onclick="modifyCategory()">Modify Category</button>
+            <button onclick="deleteCategory()">Delete Category</button>
+            <button onclick="addSeller()">Add Seller</button>
+            <button onclick="modifySeller()">Modify Seller</button>
+            <button onclick="deleteSeller()">Delete Seller</button>
+        </div>
+
+        <div class="main-content">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome to the Supermarket Management System. Use the sidebar to manage products, categories, and sellers. Stay efficient and organized with our easy-to-use platform.</p>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        let products = [];
+        let categories = [];
+        let sellers = [];
+
+        function addProduct() {
+            let productName = prompt("Enter product name:");
+            if (productName) {
+                products.push(productName);
+                displayMessage(`Product '${productName}' added successfully.`);
+            }
+        }
+
+        function modifyProduct() {
+            let oldName = prompt("Enter the product name to modify:");
+            if (products.includes(oldName)) {
+                let newName = prompt("Enter the new product name:");
+                let index = products.indexOf(oldName);
+                products[index] = newName;
+                displayMessage(`Product '${oldName}' modified to '${newName}'.`);
+            } else {
+                displayMessage(`Product '${oldName}' not found.`);
+            }
+        }
+
+        function deleteProduct() {
+            let productName = prompt("Enter the product name to delete:");
+            if (products.includes(productName)) {
+                products = products.filter(product => product !== productName);
+                displayMessage(`Product '${productName}' deleted successfully.`);
+            } else {
+                displayMessage(`Product '${productName}' not found.`);
+            }
+        }
+
+        function addCategory() {
+            let categoryName = prompt("Enter category name:");
+            if (categoryName) {
+                categories.push(categoryName);
+                displayMessage(`Category '${categoryName}' added successfully.`);
+            }
+        }
+
+        function modifyCategory() {
+            let oldName = prompt("Enter the category name to modify:");
+            if (categories.includes(oldName)) {
+                let newName = prompt("Enter the new category name:");
+                let index = categories.indexOf(oldName);
+                categories[index] = newName;
+                displayMessage(`Category '${oldName}' modified to '${newName}'.`);
+            } else {
+                displayMessage(`Category '${oldName}' not found.`);
+            }
+        }
+
+        function deleteCategory() {
+            let categoryName = prompt("Enter the category name to delete:");
+            if (categories.includes(categoryName)) {
+                categories = categories.filter(category => category !== categoryName);
+                displayMessage(`Category '${categoryName}' deleted successfully.`);
+            } else {
+                displayMessage(`Category '${categoryName}' not found.`);
+            }
+        }
+
+        function addSeller() {
+            let sellerName = prompt("Enter seller name:");
+            if (sellerName) {
+                sellers.push(sellerName);
+                displayMessage(`Seller '${sellerName}' added successfully.`);
+            }
+        }
+
+        function modifySeller() {
+            let oldName = prompt("Enter the seller name to modify:");
+            if (sellers.includes(oldName)) {
+                let newName = prompt("Enter the new seller name:");
+                let index = sellers.indexOf(oldName);
+                sellers[index] = newName;
+                displayMessage(`Seller '${oldName}' modified to '${newName}'.`);
+            } else {
+                displayMessage(`Seller '${oldName}' not found.`);
+            }
+        }
+
+        function deleteSeller() {
+            let sellerName = prompt("Enter the seller name to delete:");
+            if (sellers.includes(sellerName)) {
+                sellers = sellers.filter(seller => seller !== sellerName);
+                displayMessage(`Seller '${sellerName}' deleted successfully.`);
+            } else {
+                displayMessage(`Seller '${sellerName}' not found.`);
+            }
+        }
+
+        function logout() {
+            displayMessage("You have logged out successfully.");
+        }
+
+        function displayMessage(message) {
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = `<p>${message}</p>`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Seller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus {
+            border-color: #2980b9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+            transform: scale(1.02);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Supermarket Management System</div>
+
+    <div class="container">
+        <h1>Delete Seller</h1>
+        <form id="deleteSellerForm">
+            <div class="form-group">
+                <label for="sellerId">Seller ID to Delete:</label>
+                <input type="text" id="sellerId" name="sellerId" required>
+            </div>
+            <button type="button" class="btn" onclick="deleteSeller()">Delete Seller</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        let sellers = [
+            { id: "S001", name: "Ali", age: 25, phone: "1234567890", password: "password123" },
+            { id: "S002", name: "Sara", age: 28, phone: "0987654321", password: "password456" }
+        ];
+
+        function deleteSeller() {
+            const sellerId = document.getElementById('sellerId').value;
+
+            // Find the index of the seller with the given ID
+            const sellerIndex = sellers.findIndex(s => s.id === sellerId);
+
+            if (sellerIndex === -1) {
+                displayMessage(`Seller with ID '${sellerId}' not found.`, 'error');
+                return;
+            }
+
+            // Remove the seller from the array
+            sellers.splice(sellerIndex, 1);
+
+            displayMessage(`Seller '${sellerId}' deleted successfully!`, 'success');
+            clearForm();
+        }
+
+        function displayMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
+        }
+
+        function clearForm() {
+            document.getElementById('sellerId').value = '';
+        }
+    </script>
+</body>
+</html>
